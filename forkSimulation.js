@@ -1,6 +1,6 @@
 /* 
- create a local fork of any evm mainnet using anvil 
- simulate the v3 swap transaction on it by running this code snippet,
+ create a local fork of any evm mainnet<bsc tried> using anvil 
+ simulate the pancake v3 swap transaction on it by running this code snippet,
  and use the trace_transaction rpc method for getting the trace.
 */
 
@@ -11,7 +11,7 @@ const v3_abi = require("./v3Router.json");
 // const testnet = "https://data-seed-prebsc-1-s1.binance.org:8545";
 // const polygon_zkevm = "https://zkevm-rpc.com";
 const connection = new web3("http://127.0.0.1:8545"); // evm Fork using anvil(foundr)/ganache etc
-const swapper_mainnet_address = "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45"; // univ3/pancakev3 swap router address
+const swapper_mainnet_address = "0x1b81D678ffb9C0263b24A97847620C99d213eB14"; // pancakev3 swap router address
 const contract = new connection.eth.Contract(v3_abi, swapper_mainnet_address);
 
 
@@ -22,10 +22,10 @@ async function swap() {
     let amountOutMin = 0;
 
     let data = contract.methods.exactInputSingle({
-        "tokenIn": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-        "tokenOut": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        "fee": "3000",
-        "recipient": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "tokenIn": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+        "tokenOut": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+        "fee": "10000",
+        "recipient": "0x8103683202aa8DA10536036EDef04CDd865C225E",
         "deadline": "1911437753",
         "amountIn": amountIn,
         "amountOutMinimum": "0",
@@ -63,7 +63,7 @@ async function swap() {
     console.log("swapTx:  ", tx);
     // return;
 
-    const signedTX = await connection.eth.accounts.signTransaction(tx, "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80").then(tx => tx.rawTransaction);;
+    const signedTX = await connection.eth.accounts.signTransaction(tx, "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80").then(tx => tx.rawTransaction); // fork private key don't use it
     // console.log(signedTX);
     if (signedTX) {
         const txHash = await connection.eth.sendSignedTransaction(signedTX?.toString());
