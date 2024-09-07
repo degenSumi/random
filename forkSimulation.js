@@ -1,6 +1,6 @@
 /* 
- create a local fork using anvil 
- simulate the transaction on it,
+ create a local fork of any evm mainnet using anvil 
+ simulate the v3 swap transaction on it by running this code snippet,
  and use the trace_transaction rpc method for getting the trace.
 */
 
@@ -11,14 +11,14 @@ const v3_abi = require("./v3Router.json");
 // const testnet = "https://data-seed-prebsc-1-s1.binance.org:8545";
 // const polygon_zkevm = "https://zkevm-rpc.com";
 const connection = new web3("http://127.0.0.1:8545"); // evm Fork using anvil(foundr)/ganache etc
-const router_mainnet = "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45"; // uni/pancake router address
-const contract = new connection.eth.Contract(v3_abi, router_mainnet);
+const swapper_mainnet_address = "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45"; // univ3/pancakev3 swap router address
+const contract = new connection.eth.Contract(v3_abi, swapper_mainnet_address);
 
 
 async function swap() {
 
     let value = 0;
-    let amountIn = "10000000000000000000";
+    let amountIn = "10000000000000000000"; // Input token amount
     let amountOutMin = 0;
 
     let data = contract.methods.exactInputSingle({
@@ -55,8 +55,7 @@ async function swap() {
 
     const tx = {
         from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        // "0xf67d5d28614f26f56a73E635197534871D4ACf14",
-        to: router_mainnet,
+        to: swapper_mainnet_address,
         data,
         gas: "2000000",
         value,
